@@ -1,14 +1,32 @@
-<div>
-    <h2>Connexion</h2>
-    <form (ngSubmit)="onSubmit()">
-      <div>
-        <label for="email">email:</label>
-        <input type="email" id="email" name="email" [(ngModel)]="email" required>
+  
+  <div id="login">
+      <h3 class="text-center text-white pt-5">Login form</h3>
+      <div class="container">
+
+          <div id="login-row" class="row justify-content-center align-items-center">
+              <div id="login-column" class="col-md-6">
+                  <div id="login-box" class="col-md-12">
+                    <form (ngSubmit)="onSubmit()">
+                      <h3 class="text-center text-info">Login</h3>
+                          <div class="form-group">
+                              <label for="email" class="text-info">email:</label><br>
+                              <input type="email" id="email" name="email" [(ngModel)]="email" required class="form-control">
+                            </div>
+                          <div class="form-group">
+                              <label for="password" class="text-info">Password:</label><br>
+                              <input type="password" id="password" name="password" [(ngModel)]="password" required class="form-control">
+                          </div>
+                          <div class="form-group">
+                              <input type="submit" name="submit" class="btn btn-info btn-md" value="submit">
+                          </div>
+                      </form>
+                  </div>
+              </div>
+          </div>
+
       </div>
-      <div>
-        <label for="password">Mot de passe:</label>
-        <input type="password" id="password" name="password" [(ngModel)]="password" required>
-      </div>
-      <button type="submit">Se connecter</button>
-    </form>
-  </div>    
+  </div>
+
+  
+  
+

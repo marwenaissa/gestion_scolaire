@@ -3,9 +3,25 @@
 namespace App\Controller;
 
 use Symfony\Bundle\FrameworkBundle\Controller\AbstractController;
+use Symfony\Component\HttpFoundation\JsonResponse;
 use Symfony\Component\HttpFoundation\Response;
-use Symfony\Component\Routing\Attribute\Route;
-
+use Symfony\Component\Routing\Annotation\Route;
+use Symfony\Contracts\HttpClient\HttpClientInterface;
+use App\Repository\ProfesseurRepository;
+use App\Repository\UserRepository;
+use App\Repository\ClasseRepository;
+use Symfony\Component\Serializer\Normalizer\NormalizerInterface;
+use Symfony\Component\HttpFoundation\Request;
+use Doctrine\ORM\EntityManagerInterface;
+use App\Entity\Etudiant;
+use App\Entity\User;
+use App\Entity\Classe;
+use Symfony\Component\Serializer\Encoder\JsonEncoder;
+use Symfony\Component\Serializer\Normalizer\ObjectNormalizer;
+use Symfony\Component\Serializer\Normalizer\AbstractNormalizer;
+use Doctrine\ORM\Query\ResultSetMapping;
+use Symfony\Component\Serializer\SerializerInterface;
+use Symfony\Component\Serializer\Serializer;
 class ProfesseurController extends AbstractController
 {
     #[Route('/etudiantstest', name: 'app_etudiants' ,methods:'GET')]
@@ -38,9 +54,9 @@ class ProfesseurController extends AbstractController
 
 
     #[Route('/professeurs', name: 'app_professeur' ,methods:'GET')]
-    public function index(SerializerInterface $serializer ,EtudiantRepository $etudiantrepository): Response
+    public function index(SerializerInterface $serializer ,ProfesseurRepository $professeurrepository): Response
     {
-        $professeurs = $classerepository->findAll();
+        $professeurs = $professeurrepository->findAll();
         $encoders = [new JsonEncoder()];
         $normalizers = [new ObjectNormalizer()];
         $serializer = new Serializer($normalizers, $encoders);
@@ -60,10 +76,10 @@ class ProfesseurController extends AbstractController
     }
 
 
-    #[Route('/etudiant/{id}', name: 'app_etudiant_show', methods: ['GET'])]
-    public function show($id, SerializerInterface $serializer, EtudiantRepository $etudiantrepository): Response
+    #[Route('/professeur/{id}', name: 'app_professeur_show', methods: ['GET'])]
+    public function show($id, SerializerInterface $serializer, ProfesseurRepository $professeurRepository): Response
     {
-        $professeur = $etudiantrepository->find($id);
+        $professeur = $professeurRepository->find($id);
         $encoders = [new JsonEncoder()];
         $normalizers = [new ObjectNormalizer()];
         $serializer = new Serializer($normalizers, $encoders);
@@ -121,11 +137,16 @@ class ProfesseurController extends AbstractController
     }
 
     #[Route('/professeur/{id}', name: 'deleteprofesseur', methods: ['DELETE'])]
-    public function delete( $id, EntityManagerInterface $em, ProfesseurRepository $professeurprofesseur): JsonResponse
+    public function delete( $id, EntityManagerInterface $em,EtudiantRepository $etudiantRepository , ProfesseurRepository $professeurprofesseur): JsonResponse
     {
         $professeur = $professeurprofesseur->find($id);
+        $professeur = $user->getProfesseur();
         $em->remove($professeur);
+        $em->remove($user);
         $em->flush();
         return new JsonResponse(null, Response::HTTP_NO_CONTENT);
     }
+
+    
+
 }

@@ -44,6 +44,7 @@ class AuthController extends AbstractController
     ) {
         // Obtient les identifiants de l'utilisateur depuis la requête (par exemple, email et mot de passe)
         $credentials = json_decode($request->getContent(), true);
+       
         $email = $credentials['email'] ?? null;
         $password = $credentials['password'] ?? null;
 
@@ -105,7 +106,6 @@ class AuthController extends AbstractController
         // Crée une nouvelle entité User
         $user = new User();
         $user->setEmail($email);
-        $user->setRoles(["ROLE_PROFESSEUR"]);
         $user->setPassword($this->userPasswordHasher->hashPassword($user, $password));
         $user->setNomutilisateur($nomutilisateur);
         $user->setNom($nom);
@@ -116,6 +116,8 @@ class AuthController extends AbstractController
          $em->flush();
 
          $dernierId = $user->getId();
+         $lastuser =  $em->getRepository(User::class)->find($dernierId);
+
 
         $role = $requestData['role'] ?? null;
         if($role == "PROFESSEUR"){
@@ -127,23 +129,22 @@ class AuthController extends AbstractController
             if ($dateemploi instanceof \DateTimeInterface) {
                 $professeur->setDateemploi($dateemploi);
             } 
-            $professeur->setId($dernierId);
+            $user->setRoles(["ROLE_PROFESSEUR"]);
+            $professeur->setUser($lastuser);
             $professeur->setSpecialisation($specialisation);
             $professeur->setExperience($experience);
             $professeur->setDateemploi($dateemploi);
             $em->persist($professeur);
         }else{
             $etudiant = new Etudiant();
-            $etudiant->setId($dernierId);
+            $etudiant->setUser($lastuser);
+            $user->setRoles(["ROLE_ETUDIANT"]);
             $specialite = $requestData['specialite'] ?? null;
             $etudiant->setSpecialite("specialite");
             $em->persist($etudiant);
         }
 
         $em->flush();
-
-
-       
     
         // Génère un jeton JWT pour le nouvel utilisateur
         $token = $JWTManager->create($user);

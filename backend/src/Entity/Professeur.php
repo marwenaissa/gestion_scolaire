@@ -31,6 +31,10 @@ class Professeur
     #[ORM\OneToMany(targetEntity: Matiere::class, mappedBy: 'professeur')]
     private Collection $matieres;
 
+    #[ORM\OneToOne(inversedBy: 'professeur', cascade: ['persist', 'remove'])]
+    #[ORM\JoinColumn(nullable: false)]
+    private ?User $user = null;
+
     public function __construct()
     {
         $this->matieres = new ArrayCollection();
@@ -105,6 +109,18 @@ class Professeur
                 $matiere->setProfesseur(null);
             }
         }
+
+        return $this;
+    }
+
+    public function getUser(): ?User
+    {
+        return $this->user;
+    }
+
+    public function setUser(User $user): static
+    {
+        $this->user = $user;
 
         return $this;
     }

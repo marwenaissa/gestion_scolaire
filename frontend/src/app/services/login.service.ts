@@ -22,8 +22,8 @@ export class LoginService {
     localStorage.removeItem(this.tokenKey);
   }
   constructor(private http: HttpClient , private router: Router) {}
-  login(username: string, email: string): Observable<any> {
-    const user = { username, email }; // Créez un objet user avec les données fournies
+  login(email: string, password: string): Observable<any> {
+    const user = { email, password }; // Créez un objet user avec les données fournies
     return this.http.post('http://localhost:8000/login', user);
   }
 
@@ -31,10 +31,10 @@ export class LoginService {
     const token = response.token;
     console.log("sa passe par handleloginresponse");
     this.setToken(token);
-    this.router.navigate(['/produit']);
+    //this.router.navigate(['/produit']);
   }
   logout(): void {
     this.removeToken();
-    this.router.navigate(['/login']);
+    //this.router.navigate(['/login']);
   }
 }

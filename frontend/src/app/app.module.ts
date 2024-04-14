@@ -6,6 +6,8 @@ import { LoginComponent } from './login/login.component';
 import { FormsModule } from '@angular/forms';
 import { HttpClientModule  } from '@angular/common/http';
 import { RouterModule, Routes } from '@angular/router';
+import { AuthGuard } from './auth/auth.guard';
+import { ClasseComponent } from './classe/classe.component'; // Assurez-vous que le chemin est correct
 
 
 const routes: Routes = [
@@ -18,7 +20,8 @@ const routes: Routes = [
 @NgModule({
   declarations: [
     AppComponent,
-    LoginComponent
+    LoginComponent,
+    ClasseComponent
   ],
   imports: [
     BrowserModule,
@@ -27,7 +30,7 @@ const routes: Routes = [
     HttpClientModule,
     RouterModule.forRoot(routes)
   ],
-  providers: [],
+  providers: [AuthGuard, ],
   bootstrap: [AppComponent]
 })
 export class AppModule { }

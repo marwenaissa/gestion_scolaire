@@ -2,7 +2,7 @@ import { Component, OnInit } from '@angular/core';
 import { LoginService } from '../services/login.service';
 import { Router } from '@angular/router'; // Importer le service Router
 import { HttpClient } from '@angular/common/http';
-import { Observable , BehaviorSubject } from 'rxjs';
+
 
 
 @Component({
@@ -17,7 +17,7 @@ export class LoginComponent implements OnInit {
 
   
   constructor(private LoginService: LoginService, private http: HttpClient, private router: Router) {}
-  user = { username: '', password: '' };
+  user = { email: '', password: '' };
   ngOnInit(): void {
     // Vérifiez si l'utilisateur est déjà connecté
     if (this.LoginService.isLoggedIn()) {
@@ -28,6 +28,8 @@ export class LoginComponent implements OnInit {
 
   
   onSubmit() {
+
+  
     this.LoginService.login(this.email, this.password)
       .subscribe(
         (response: { token: string }) => {  // Définissez le type de 'response'
@@ -50,7 +52,7 @@ export class LoginComponent implements OnInit {
             // this.authService.setToken(response.token);
   
             // Redirection vers la route "produit"
-            this.router.navigate(['/produit']);
+            //this.router.navigate(['/produit']);
           }
         },
         (error: any) => {
